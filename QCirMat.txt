@@ -1,0 +1,167 @@
+(*基本量子态的矩阵表示*)
+Ket0 := {{1}, {0}}
+Ket1 := {{0}, {1}}
+Bra0 := {{1, 0}}
+Bra1 := {{0, 1}}
+KetPlus := 1/Sqrt[2]*{{1}, {1}}
+KetMinus := 1/Sqrt[2]*{{1}, {-1}}
+BraPlus := 1/Sqrt[2]*{{1, 1}}
+BraMinus := 1/Sqrt[2]*{{1, -1}}
+KetBell :=  1/Sqrt[2]*{{1}, {0}, {0}, {1}}
+KetBell01 := 1/Sqrt[2]*{{0}, {1}, {1}, {0}}
+KetBell10 := 1/Sqrt[2]*{{1}, {0}, {0}, {-1}}
+KetBell11 := 1/Sqrt[2]*{{0}, {1}, {-1}, {0}}
+BraBell := 1/Sqrt[2]*{{1, 0, 0, 1}}
+BraBell01 := 1/Sqrt[2]*{{0, 1, 1, 0}}
+BraBell10 := 1/Sqrt[2]*{{1, 0, 0, -1}}
+BraBell11 := 1/Sqrt[2]*{{0, 1, -1, 0}}
+KetBloch[theta_, phi_, gamma_] := Exp[I*gamma]*{{Cos[theta/2]}, {Exp[I*phi]*Sin[theta/2]}}
+BraBloch[theta_, phi_, gamma_] := Exp[-I*gamma]*{{Cos[theta/2], Exp[I*phi]*Sin[theta/2]}}
+
+(*基本量子门的矩阵表示*)
+H := 1/Sqrt[2]*{{1, 1}, {1, -1}}
+Id := {{1, 0}, {0, 1}}
+X := {{0, 1}, {1, 0}}
+Y := {{0, -I}, {I, 0}}
+Z := {{1, 0}, {0, -1}}
+S := {{1, 0}, {0, I}}
+T := {{1, 0}, {0, Exp[I*Pi/4]}}
+Sdag := {{1, 0}, {0, -I}}
+Tdag := {{1, 0}, {0, Exp[-I*Pi/4]}}
+SqrtX := H . S . H
+SqrtXdag := H . Sdag . H
+
+(*含参量子门的矩阵表示*)
+Rx[theta_] := {{Cos[theta/2], -I*Sin[theta/2]}, {-I*Sin[theta/2], 
+   Cos[theta/2]}}
+Ry[theta_] := {{Cos[theta/2], -Sin[theta/2]}, {Sin[theta/2], 
+   Cos[theta/2]}}
+Rz[theta_] := {{Exp[-I*theta/2], 0}, {0, Exp[I*theta/2]}}
+R1[theta_] := {{1, 0}, {0, Exp[I*theta]}}
+U3[theta_, phi_, 
+  lambda_] := {{Cos[theta/2], -Exp[I*lambda]*
+    Sin[theta/2]}, {Exp[I*phi]*Sin[theta/2], 
+   Exp[I*(lambda + phi)]*Cos[theta/2]}}
+
+(*多位量子门的矩阵表示*)
+CNOT := {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}}
+CNOT21 := {{1, 0, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}, {0, 1, 0, 0}}
+SWAP := {{1, 0, 0, 0}, {0, 0, 1, 0}, {0, 1, 0, 0}, {0, 0, 0, 1}}
+CZ := {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, -1}}
+iSWAP := {{1, 0, 0, 0}, {0, 0, I, 0}, {0, I, 0, 0}, {0, 0, 0, 1}}
+
+
+ApplyGate[gate_, nqbits_, indexlist_] := 
+ Module[{ret = SparseArray[{}, {2^nqbits, 2^nqbits}], cond = True, 
+   gdim, i, j, k, ngatebits, cindexlist, tmpval1, tmpval2, digi1, 
+   digi2, addlist},
+  ApplyGate::errmsg1 = "参数gate必须是具有(2^k)\[Times](2^k)维度的矩阵！";
+  ApplyGate::errmsg2 = "参数indexlist必须是无重复的合法的下标列表！";
+  ApplyGate::errmsg3 = "参数nqbits必须是正整数！";
+  ApplyGate::errmsg4 = "参数indexlist的长度与gate的维度不匹配！";
+  ApplyGate::errmsg5 = "参数nqbits不能小于indexlist的长度！";
+  
+  cond = Catch[
+    If[MatrixQ[gate], , Message[ApplyGate::errmsg1]; Throw[False]];
+    If[ListQ[indexlist], , Message[ApplyGate::errmsg2]; 
+     Throw[False]];
+    If[DuplicateFreeQ[indexlist], , Message[ApplyGate::errmsg2]; 
+     Throw[False]];
+    If[IntegerQ[nqbits] And nqbits > 0, , Message[ApplyGate::errmsg3];
+      Throw[False]];
+    If[Part[Dimensions[gate], 1] == Part[Dimensions[gate], 2], , 
+     Message[ApplyGate::errmsg1]; Throw[False]];
+    gdim = Part[Dimensions[gate], 1];
+    ngatebits = Log2[gdim];
+    If[IntegerQ[ngatebits], , Message[ApplyGate::errmsg1]; 
+     Throw[False]];
+    If[ngatebits == Length[indexlist], , Message[ApplyGate::errmsg4]; 
+     Throw[False]];
+    If[nqbits >= ngatebits, , Message[ApplyGate::errmsg5]; 
+     Throw[False]];
+    If[AllTrue[indexlist, Between[{1, nqbits}]], , 
+     Message[ApplyGate::errmsg2]; Throw[False]];
+    Throw[True];
+    ];
+  
+  If[cond,
+   cindexlist = Complement[Range[nqbits], indexlist];
+   addlist = {};
+   For[i = 1, i <= 2^Length[cindexlist], i++,
+    digi1 = IntegerDigits[i - 1, 2, Length[cindexlist]];
+    tmpval1 = 0;
+    For[j = 1, j <= Length[cindexlist], j++,
+     tmpval1 += 
+      BitShiftLeft[Part[digi1, j], nqbits - Part[cindexlist, j]]
+     ];
+    AppendTo[addlist, tmpval1];
+    ];
+   
+   For[i = 1, i <= gdim, i++,
+    For[j = 1, j <= gdim, j++,
+      digi1 = IntegerDigits[i - 1, 2, ngatebits];
+      digi2 = IntegerDigits[j - 1, 2, ngatebits];
+      tmpval1 = tmpval2 = 0;
+      For[k = 1, k <= ngatebits, k++,
+       tmpval1 += 
+        BitShiftLeft[Part[digi1, k], nqbits - Part[indexlist, k]];
+       tmpval2 += 
+        BitShiftLeft[Part[digi2, k], nqbits - Part[indexlist, k]];
+       ];
+      For[k = 1, k <= Length[addlist], k++,
+       Part[ret, BitOr[tmpval1, Part[addlist, k]] + 1, 
+          BitOr[tmpval2, Part[addlist, k]] + 1] = Part[gate, i, j];
+       ];
+      ];
+    ];
+   
+   Normal[ret]
+   , $Failed]
+   ]
+
+
+
+ControlledGate[gate_, nctrlbits_] := Module[{ids, cond = True},
+  ControlledGate::errmsg1 = "参数gate必须是方阵！";
+  ControlledGate::errmsg2 = "参数nctrlbits必须是正整数！";
+  
+  cond = Catch[
+    If[MatrixQ[gate], , Message[ControlledGate::errmsg1]; 
+     Throw[False]];
+    If[Part[Dimensions[gate], 1] == Part[Dimensions[gate], 2], , 
+     Message[ControlledGate::errmsg1]; Throw[False]];
+    If[IntegerQ[nctrlbits] And nctrlbits > 0, , 
+     Message[ControlledGate::errmsg2]; Throw[False]];
+    Throw[True];
+    ];
+  
+  If[cond,
+   ids = IdentityMatrix[Part[Dimensions[gate], 1]*(2^nctrlbits - 1)];
+   Normal[BlockDiagonalMatrix[{ids, gate}]]
+   , $Failed]
+  ]
+
+
+
+MultiGate[sqgate_, nqbits_] := Module[{cond = True, ret = {{1}}, i},
+  MultiGate::errmsg1 = "参数sqgate必须是2\[Times]2矩阵！";
+  ControlledGate::errmsg2 = "参数nqbits必须是正整数！";
+  
+  cond = Catch[
+    If[MatrixQ[sqgate], , Message[MultiGate::errmsg1]; Throw[False]];
+    If[Part[Dimensions[sqgate], 1] == 
+      2 And Part[Dimensions[sqgate], 2] == 2, , 
+     Message[ControlledGate::errmsg1]; Throw[False]];
+    If[IntegerQ[nqbits] And nqbits > 0, , Message[MultiGate::errmsg2];
+      Throw[False]];
+    Throw[True];
+    ];
+  
+  If[cond,
+   For[i = 0, i < nqbits, i++,
+    ret = KroneckerProduct[ret, sqgate]
+    ];
+   ret
+   , $Failed]
+  ]
+
