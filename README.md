@@ -44,7 +44,7 @@ QCirMat提供若干基本量子门的矩阵表示
 
 #### 单比特门
 
-- I门：`Id` （在Mathematica中`I`已被用于虚数单位）
+- I门：`Id` （注：在Mathematica中`I`已被用于虚数单位）
 - X门：`X`
 - Y门：`Y`
 - Z门：`Z`
@@ -120,6 +120,56 @@ MultiGate[sqgate_, nqbits_]
 - 函数返回一个 $2^n\times 2^n$ 维矩阵。
 
 `MultiGate[U, 2]`等价于`KroneckerProduct[U, U]`；`MultiGate[U, 3]`等价于`KroneckerProduct[U, U, U]`。
+
+### 2.4 对易子和反对易子
+
+对易子 $[A, B]=AB-BA$
+反对易子 $\{A,B\}=AB+BA$
+
+```
+Commutator[a_, b_]     := a . b - b . a
+AntiCommutator[a_, b_] := a . b + a . b
+```
+
+### 2.5 量子哈密顿量模拟的矩阵表示
+
+量子哈密顿量模拟算法即实现变换： $U=e^{-iHt}$ ，其中 $H$ 为代表量子系统哈密顿量的厄密矩阵， $t$ 为设定的演化时间。
+
+设总哈密顿量可以写成 $m$ 个局部哈密顿量之和 $H=H_1+H_2+\dots+H_m$ ，若这 $m$ 个局部哈密顿量两两对易（即乘法可交换： $\forall i\neq j, H_iH_j=H_jH_i$ ），则对总哈密顿量的模拟可以严格分解为对各局部哈密顿量的依次模拟：
+
+$$ e^{-i(H_1+H_2+\dots+H_m)t} = e^{-iH_1t}e^{-iH_2t} \dots e^{-iH_mt} $$
+
+然而在实际中，各局部哈密顿量往往不具有对易性质，因此需要使用一定的近似公式来进行模拟。有两种常用的近似方式：Lie-Trotter和2阶Suzuki，它们分别可以近似到时间步长 $\Delta t$ 的平方和三次方。
+Lie-Trotter公式：
+$$e^{-i(H_1+H_2+\dots+H_m)\Delta t} = e^{-iH_1 \Delta t}e^{-iH_2 \Delta t} \dots e^{-iH_m \Delta t} + O(\Delta t^2)$$
+
+2阶Suzuki公式：
+$$e^{-i(H_1+H_2+\dots+H_m)\Delta t} = e^{-iH_1 \Delta t/2}e^{-iH_2 \Delta t/2} \dots e^{-iH_m \Delta t/2}e^{-iH_m \Delta t/2}e^{-iH_{m-1} \Delta t/2} \dots e^{-iH_1 \Delta t/2} + O(\Delta t^3)$$
+
+因此在实践中，可以选定一个重复次数 $n$ ，并取时间步长 $\Delta t=t/n$ ，于是总的哈密顿量模拟可以分解为 $n$ 次重复：
+$$e^{-i(H_1+H_2+\dots+H_m)t} \sim \left( e^{-iH_1 t/n}e^{-iH_2 t/n} \dots e^{-iH_m t/n} \right)^n$$
+
+$$e^{-i(H_1+H_2+\dots+H_m)t} \sim \left( e^{-iH_1 t/2n}e^{-iH_2 t/2n} \dots e^{-iH_m t/2n}e^{-iH_m t/2n}e^{-iH_{m-1} t/2n} \dots e^{-iH_1 t/2n} \right)^n$$
+
+QCirMat提供了量子哈密顿量模拟相关计算函数，包括精确计算，Trotter分解和二阶Suzuki分解的计算，以及对应的数值计算版本。
+
+解析计算函数（ `hamiltonian_` 为单个哈密顿量矩阵， `shlist_` 为代表子系统的哈密顿量矩阵的列表， `t_` 为演化时间， `ndiv_` 为Trotter或Suzuki分解的重复次数 $n$ ）
+
+```
+HamiltonianSimulation[hamiltonian_, t_]
+SubHamiltonianSumSimulation[shlist_, t_]
+ApproximateHamiltonianSimulationTrotter[shlist_, t_, ndiv_]
+ApproximateHamiltonianSimulationSuzuki2[shlist_, t_, ndiv_]
+```
+
+由于量子哈密顿量模拟解析计算的复杂度较大，QCirMat也提供了数值计算函数用于快速计算。数值计算函数为对应的解析计算函数加前缀 `N`
+
+```
+NHamiltonianSimulation[hamiltonian_, t_]
+NSubHamiltonianSumSimulation[shlist_, t_]
+NApproximateHamiltonianSimulationTrotter[shlist_, t_, ndiv_]
+NApproximateHamiltonianSimulationSuzuki2[shlist_, t_, ndiv_]
+```
 
 ## 三、示例
 
@@ -203,4 +253,9 @@ longpx@ihep.ac.cn
 
 ## 五、版本历史
 
-2025/8/14 第一个公开版本
+2025/12/11 v0.2 版本更新
+- 增加计算对易子和反对易子的函数；
+- 增加量子哈密顿量模拟相关计算函数，包括精确计算，Trotter分解和二阶Suzuki分解的计算，以及对应的数值计算版本；
+- 增加注释，修正bug。
+
+2025/8/14 第一个公开版本（v0.1）

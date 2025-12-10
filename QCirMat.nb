@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     31431,        859]
-NotebookOptionsPosition[     31051,        844]
-NotebookOutlinePosition[     31475,        861]
-CellTagsIndexPosition[     31432,        858]
+NotebookDataLength[     42055,       1105]
+NotebookOptionsPosition[     41584,       1089]
+NotebookOutlinePosition[     42001,       1106]
+CellTagsIndexPosition[     41958,       1103]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -419,7 +419,32 @@ Cell[BoxData[
        RowBox[{"0", ",", "I", ",", "0", ",", "0"}], "}"}], ",", 
       RowBox[{"{", 
        RowBox[{"0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], 
-   "\[IndentingNewLine]", "\n", "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", "\:5bf9\:6613\:5b50\:548c\:53cd\:5bf9\:6613\:5b50", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Commutator", "[", 
+     RowBox[{"a_", ",", "b_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"a", ".", "b"}], "-", 
+     RowBox[{"b", ".", "a"}]}]}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"AntiCommutator", "[", 
+     RowBox[{"a_", ",", "b_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"a", ".", "b"}], "+", 
+     RowBox[{"a", ".", "b"}]}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:5728\:5177\:6709nqbits\:4e2a\:91cf\:5b50\:6bd4\:7279\:7684\:7ebf\:8def\
+\:4e0a", "\:ff0c", 
+     "\:5bf9\:4ee5indexlist\:5217\:8868\:4e3a\:4e0b\:6807\:7684\:4e00\:7cfb\
+\:5217\:91cf\:5b50\:6bd4\:7279", "\:ff0c", "\:5e94\:7528gate\:95e8", "\:ff0c",
+      "\:751f\:6210\:76f8\:5e94\:7684\:77e9\:9635\:8868\:793a", "\:3002", 
+     "indexlist\:7684\:91cf\:5b50\:6bd4\:7279\:4e2a\:6570\:5e94\:4e0egate\
+\:95e8\:7684\:7ef4\:5ea6\:76f8\:5339\:914d", "\:3002"}], "*)"}], 
+   "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"ApplyGate", "[", 
      RowBox[{"gate_", ",", "nqbits_", ",", "indexlist_"}], "]"}], ":=", 
@@ -684,8 +709,16 @@ Cell[BoxData[
                  "]"}], ";"}]}], "]"}], ";"}]}], "]"}], ";", 
           "\[IndentingNewLine]", 
           RowBox[{"Normal", "[", "ret", "]"}]}], ",", "$Failed"}], "]"}]}]}], 
-     "]"}]}], "\[IndentingNewLine]", "\[IndentingNewLine]", "\n", 
-   "\[IndentingNewLine]", 
+     "]"}]}], "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:751f\:6210\:5177\:6709nctrlbits\:4e2a\:63a7\:5236\:6bd4\:7279\:7684\
+\:53d7\:63a7\:7248\:672c\:7684gate\:95e8\:7684\:77e9\:9635\:8868\:793a", 
+     "\:3002", 
+     "\:751f\:6210\:7684\:53d7\:63a7\:95e8\:4e2d\:524dnctrlbits\:4e2a\:91cf\
+\:5b50\:6bd4\:7279\:4e3a\:63a7\:5236\:4f4d", "\:ff0c", 
+     "\:540e\:7eed\:7684\:91cf\:5b50\:6bd4\:7279\:4f5c\:7528gate\:95e8", 
+     "\:3002"}], "*)"}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"ControlledGate", "[", 
      RowBox[{"gate_", ",", "nctrlbits_"}], "]"}], ":=", 
@@ -693,7 +726,7 @@ Cell[BoxData[
      RowBox[{
       RowBox[{"{", 
        RowBox[{"ids", ",", 
-        RowBox[{"cond", "=", "True"}]}], "}"}], ",", 
+        RowBox[{"cond", "=", "True"}]}], "}"}], ",", "\[IndentingNewLine]", 
       RowBox[{
        RowBox[{
         RowBox[{"ControlledGate", "::", "errmsg1"}], "=", 
@@ -761,8 +794,13 @@ Cell[BoxData[
            RowBox[{"BlockDiagonalMatrix", "[", 
             RowBox[{"{", 
              RowBox[{"ids", ",", "gate"}], "}"}], "]"}], "]"}]}], ",", 
-         "$Failed"}], "]"}]}]}], "]"}]}], "\[IndentingNewLine]", 
-   "\[IndentingNewLine]", "\n", "\[IndentingNewLine]", 
+         "$Failed"}], "]"}]}]}], "]"}]}], "\[IndentingNewLine]", "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:5bf9\:603b\:5171nqbits\:4e2a\:91cf\:5b50\:6bd4\:7279\:7684\:6bcf\:4e00\
+\:4e2a\:5206\:522b\:5e94\:7528\:5355\:6bd4\:7279\:91cf\:5b50\:95e8sqgate", 
+     "\:ff0c", "\:751f\:6210\:5bf9\:5e94\:7684\:77e9\:9635\:8868\:793a", 
+     "\:3002"}], "*)"}], "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"MultiGate", "[", 
      RowBox[{"sqgate_", ",", "nqbits_"}], "]"}], ":=", 
@@ -774,13 +812,14 @@ Cell[BoxData[
         RowBox[{"ret", "=", 
          RowBox[{"{", 
           RowBox[{"{", "1", "}"}], "}"}]}], ",", "i"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
       RowBox[{
        RowBox[{
         RowBox[{"MultiGate", "::", "errmsg1"}], "=", 
         "\"\<\:53c2\:6570sqgate\:5fc5\:987b\:662f2\[Times]2\:77e9\:9635\:ff01\
 \>\""}], ";", "\[IndentingNewLine]", 
        RowBox[{
-        RowBox[{"ControlledGate", "::", "errmsg2"}], "=", 
+        RowBox[{"MultiGate", "::", "errmsg2"}], "=", 
         "\"\<\:53c2\:6570nqbits\:5fc5\:987b\:662f\:6b63\:6574\:6570\:ff01\>\"\
 "}], ";", "\[IndentingNewLine]", 
        RowBox[{"cond", "=", 
@@ -808,7 +847,7 @@ Cell[BoxData[
                "]"}]}], "==", "2"}], ",", " ", ",", 
             RowBox[{
              RowBox[{"Message", "[", 
-              RowBox[{"ControlledGate", "::", "errmsg1"}], "]"}], ";", 
+              RowBox[{"MultiGate", "::", "errmsg1"}], "]"}], ";", 
              RowBox[{"Throw", "[", "False", "]"}]}]}], "]"}], ";", 
           "\[IndentingNewLine]", 
           RowBox[{"If", "[", 
@@ -837,13 +876,219 @@ Cell[BoxData[
              RowBox[{"KroneckerProduct", "[", 
               RowBox[{"ret", ",", "sqgate"}], "]"}]}]}], "]"}], ";", 
           "\[IndentingNewLine]", "ret"}], ",", "$Failed"}], "]"}]}]}], 
-     "]"}]}], "\n"}]}]], "Input",
- CellChangeTimes->{{3.9641361274641*^9, 
-  3.9641361295872493`*^9}},ExpressionUUID->"bec45640-fbd1-4bb5-ba5a-\
-c972f369b820"]
+     "]"}]}], "\[IndentingNewLine]", "\n"}]}]], "Input",
+ CellChangeTimes->{{3.9641361274641*^9, 3.9641361295872493`*^9}, {
+   3.9739085106334105`*^9, 3.973908579003745*^9}, {3.9739088083078747`*^9, 
+   3.9739088380514016`*^9}, {3.974331338491068*^9, 3.9743313796013412`*^9}, 
+   3.974351278983327*^9, {3.974351918525691*^9, 3.974352078447812*^9}, {
+   3.9743526015447483`*^9, 3.9743527514342117`*^9}, {3.9743527974799385`*^9, 
+   3.9743528148231897`*^9}, 3.9743528488892546`*^9, {3.974353170264509*^9, 
+   3.9743531718783345`*^9}},ExpressionUUID->"bec45640-fbd1-4bb5-ba5a-\
+c972f369b820"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "\:7cbe\:786e\:7684\:91cf\:5b50\:54c8\:5bc6\:987f\:91cf\:6a21\:62df", 
+    "\:ff0c", "\:4ee5hamiltonian\:4e3a\:54c8\:5bc6\:987f\:91cf\:77e9\:9635", 
+    "\:ff0c", "\:6f14\:5316\:65f6\:95f4t"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"HamiltonianSimulation", "[", 
+     RowBox[{"hamiltonian_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"MatrixFunction", "[", 
+     RowBox[{"Exp", ",", 
+      RowBox[{
+       RowBox[{"-", "I"}], "*", "hamiltonian", "*", "t"}]}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:7cbe\:786e\:7684\:91cf\:5b50\:54c8\:5bc6\:987f\:91cf\:6a21\:62df", 
+     "\:ff0c", 
+     "\:4ee5shlist\:4e2d\:7684\:77e9\:9635\:6c42\:548c\:4e3a\:54c8\:5bc6\:987f\
+\:91cf", "\:ff0c", "\:6f14\:5316\:65f6\:95f4t"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"SubHamiltonianSumSimulation", "[", 
+     RowBox[{"shlist_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"HamiltonianSimulation", "[", 
+     RowBox[{
+      RowBox[{"Total", "[", "shlist", "]"}], ",", "t"}], "]"}]}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:6309\:7167Trotter\:5206\:89e3\:7684\:91cf\:5b50\:54c8\:5bc6\:987f\:91cf\
+\:6a21\:62df\:8fd1\:4f3c", "\:ff0c", 
+     "\:4ee5shlist\:4e2d\:7684\:77e9\:9635\:6c42\:548c\:4e3a\:54c8\:5bc6\:987f\
+\:91cf", "\:ff0c", "\:6f14\:5316\:65f6\:95f4t", "\:ff0c", 
+     "\:5206\:89e3\:6b21\:6570ndiv"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ApproximateHamiltonianSimulationTrotter", "[", 
+     RowBox[{"shlist_", ",", "t_", ",", "ndiv_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"explist", ",", "roundmatrix", ",", "ret"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"hsimdt", "[", "x_", "]"}], ":=", 
+        RowBox[{"HamiltonianSimulation", "[", 
+         RowBox[{"x", ",", 
+          RowBox[{"t", "/", "ndiv"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"explist", "=", 
+        RowBox[{"Map", "[", 
+         RowBox[{"hsimdt", ",", "shlist"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"roundmatrix", "=", 
+        RowBox[{"Apply", "[", 
+         RowBox[{"Dot", ",", "explist"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"ret", "=", 
+        RowBox[{"MatrixPower", "[", 
+         RowBox[{"roundmatrix", ",", "ndiv"}], "]"}]}]}]}], "]"}]}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:6309\:7167\:4e8c\:9636Suzuki\:5206\:89e3\:7684\:91cf\:5b50\:54c8\:5bc6\
+\:987f\:91cf\:6a21\:62df\:8fd1\:4f3c", "\:ff0c", 
+     "\:4ee5shlist\:4e2d\:7684\:77e9\:9635\:6c42\:548c\:4e3a\:54c8\:5bc6\:987f\
+\:91cf", "\:ff0c", "\:6f14\:5316\:65f6\:95f4t", "\:ff0c", 
+     "\:5206\:89e3\:6b21\:6570ndiv"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"ApproximateHamiltonianSimulationSuzuki2", "[", 
+     RowBox[{"shlist_", ",", "t_", ",", "ndiv_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"explist", ",", "roundmatrix", ",", "ret"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"hsimdt2", "[", "x_", "]"}], ":=", 
+        RowBox[{"HamiltonianSimulation", "[", 
+         RowBox[{"x", ",", 
+          RowBox[{
+           RowBox[{"t", "/", "ndiv"}], "/", "2"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"explist", "=", 
+        RowBox[{"Map", "[", 
+         RowBox[{"hsimdt2", ",", "shlist"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"roundmatrix", "=", 
+        RowBox[{
+         RowBox[{"Apply", "[", 
+          RowBox[{"Dot", ",", "explist"}], "]"}], ".", 
+         RowBox[{"Apply", "[", 
+          RowBox[{"Dot", ",", 
+           RowBox[{"Reverse", "[", "explist", "]"}]}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"ret", "=", 
+        RowBox[{"MatrixPower", "[", 
+         RowBox[{"roundmatrix", ",", "ndiv"}], "]"}]}]}]}], "]"}]}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:6570\:503c\:8ba1\:7b97\:91cf\:5b50\:54c8\:5bc6\:987f\:91cf\:6a21\:62df\
+", "\:ff0c", "\:4ee5hamiltonian\:4e3a\:54c8\:5bc6\:987f\:91cf\:77e9\:9635", 
+     "\:ff0c", "\:6f14\:5316\:65f6\:95f4t"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"NHamiltonianSimulation", "[", 
+     RowBox[{"hamiltonian_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"MatrixFunction", "[", 
+     RowBox[{"Exp", ",", 
+      RowBox[{"N", "[", 
+       RowBox[{
+        RowBox[{"-", "I"}], "*", "hamiltonian", "*", "t"}], "]"}]}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:6570\:503c\:8ba1\:7b97\:91cf\:5b50\:54c8\:5bc6\:987f\:91cf\:6a21\:62df\
+", "\:ff0c", 
+     "\:4ee5shlist\:4e2d\:7684\:77e9\:9635\:6c42\:548c\:4e3a\:54c8\:5bc6\:987f\
+\:91cf", "\:ff0c", "\:6f14\:5316\:65f6\:95f4t"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"NSubHamiltonianSumSimulation", "[", 
+     RowBox[{"shlist_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"NHamiltonianSimulation", "[", 
+     RowBox[{
+      RowBox[{"Total", "[", "shlist", "]"}], ",", "t"}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:6570\:503c\:8ba1\:7b97\:6309\:7167Trotter\:5206\:89e3\:7684\:91cf\:5b50\
+\:54c8\:5bc6\:987f\:91cf\:6a21\:62df\:8fd1\:4f3c", "\:ff0c", 
+     "\:4ee5shlist\:4e2d\:7684\:77e9\:9635\:6c42\:548c\:4e3a\:54c8\:5bc6\:987f\
+\:91cf", "\:ff0c", "\:6f14\:5316\:65f6\:95f4t", "\:ff0c", 
+     "\:5206\:89e3\:6b21\:6570ndiv"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"NApproximateHamiltonianSimulationTrotter", "[", 
+     RowBox[{"shlist_", ",", "t_", ",", "ndiv_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"explist", ",", "roundmatrix", ",", "ret"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"hsimdt", "[", "x_", "]"}], ":=", 
+        RowBox[{"NHamiltonianSimulation", "[", 
+         RowBox[{"x", ",", 
+          RowBox[{"t", "/", "ndiv"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"explist", "=", 
+        RowBox[{"Map", "[", 
+         RowBox[{"hsimdt", ",", "shlist"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"roundmatrix", "=", 
+        RowBox[{"Apply", "[", 
+         RowBox[{"Dot", ",", "explist"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"ret", "=", 
+        RowBox[{"MatrixPower", "[", 
+         RowBox[{"roundmatrix", ",", "ndiv"}], "]"}]}]}]}], "]"}]}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+    "\:6570\:503c\:8ba1\:7b97\:6309\:7167\:4e8c\:9636Suzuki\:5206\:89e3\:7684\
+\:91cf\:5b50\:54c8\:5bc6\:987f\:91cf\:6a21\:62df\:8fd1\:4f3c", "\:ff0c", 
+     "\:4ee5shlist\:4e2d\:7684\:77e9\:9635\:6c42\:548c\:4e3a\:54c8\:5bc6\:987f\
+\:91cf", "\:ff0c", "\:6f14\:5316\:65f6\:95f4t", "\:ff0c", 
+     "\:5206\:89e3\:6b21\:6570ndiv"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"NApproximateHamiltonianSimulationSuzuki2", "[", 
+     RowBox[{"shlist_", ",", "t_", ",", "ndiv_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"explist", ",", "roundmatrix", ",", "ret"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"hsimdt2", "[", "x_", "]"}], ":=", 
+        RowBox[{"NHamiltonianSimulation", "[", 
+         RowBox[{"x", ",", 
+          RowBox[{
+           RowBox[{"t", "/", "ndiv"}], "/", "2"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"explist", "=", 
+        RowBox[{"Map", "[", 
+         RowBox[{"hsimdt2", ",", "shlist"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"roundmatrix", "=", 
+        RowBox[{
+         RowBox[{"Apply", "[", 
+          RowBox[{"Dot", ",", "explist"}], "]"}], ".", 
+         RowBox[{"Apply", "[", 
+          RowBox[{"Dot", ",", 
+           RowBox[{"Reverse", "[", "explist", "]"}]}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"ret", "=", 
+        RowBox[{"MatrixPower", "[", 
+         RowBox[{"roundmatrix", ",", "ndiv"}], "]"}]}]}]}], "]"}]}], 
+   "\n"}]}]], "Input",
+ CellChangeTimes->{{3.974352820253075*^9, 3.9743528307885237`*^9}, {
+  3.9743528809054375`*^9, 3.9743529834172373`*^9}, {3.9743530804083295`*^9, 
+  3.974353155035707*^9}, {3.974353308841097*^9, 
+  3.9743533298317795`*^9}},ExpressionUUID->"85e80a91-401b-4194-9d5a-\
+ab5e01659ed0"]
 },
-WindowSize->{1440., 742.5},
-WindowMargins->{{-4.875, Automatic}, {Automatic, -4.875}},
+WindowSize->{1430.25, 732.75},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"13.1 for Microsoft Windows (64-bit) (2022\:5e746\:670816\
 \:65e5)",
 StyleDefinitions->"Default.nb",
@@ -860,10 +1105,9 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 30489, 822, 3256, "Input",ExpressionUUID->"bec45640-fbd1-4bb5-ba5a-c972f369b820"]
+Cell[558, 20, 32683, 866, 3370, "Input",ExpressionUUID->"bec45640-fbd1-4bb5-ba5a-c972f369b820"],
+Cell[33244, 888, 8336, 199, 982, "Input",ExpressionUUID->"85e80a91-401b-4194-9d5a-ab5e01659ed0"]
 }
 ]
 *)
-
-(* End of internal cache information *)
 

@@ -50,7 +50,12 @@ SWAP := {{1, 0, 0, 0}, {0, 0, 1, 0}, {0, 1, 0, 0}, {0, 0, 0, 1}}
 CZ := {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, -1}}
 iSWAP := {{1, 0, 0, 0}, {0, 0, I, 0}, {0, I, 0, 0}, {0, 0, 0, 1}}
 
+(*对易子和反对易子*)
+Commutator[a_, b_] := a . b - b . a
+AntiCommutator[a_, b_] := a . b + a . b
 
+
+(*在具有nqbits个量子比特的线路上，对以indexlist列表为下标的一系列量子比特，应用gate门，生成相应的矩阵表示。indexlist的量子比特个数应与gate门的维度相匹配。*)
 ApplyGate[gate_, nqbits_, indexlist_] := 
  Module[{ret = SparseArray[{}, {2^nqbits, 2^nqbits}], cond = True, 
    gdim, i, j, k, ngatebits, cindexlist, tmpval1, tmpval2, digi1, 
@@ -120,7 +125,7 @@ ApplyGate[gate_, nqbits_, indexlist_] :=
    ]
 
 
-
+(*生成具有nctrlbits个控制比特的受控版本的gate门的矩阵表示。生成的受控门中前nctrlbits个量子比特为控制位，后续的量子比特作用gate门。*)
 ControlledGate[gate_, nctrlbits_] := Module[{ids, cond = True},
   ControlledGate::errmsg1 = "参数gate必须是方阵！";
   ControlledGate::errmsg2 = "参数nctrlbits必须是正整数！";
@@ -142,16 +147,16 @@ ControlledGate[gate_, nctrlbits_] := Module[{ids, cond = True},
   ]
 
 
-
+(*对总共nqbits个量子比特的每一个分别应用单比特量子门sqgate，生成对应的矩阵表示。*)
 MultiGate[sqgate_, nqbits_] := Module[{cond = True, ret = {{1}}, i},
   MultiGate::errmsg1 = "参数sqgate必须是2\[Times]2矩阵！";
-  ControlledGate::errmsg2 = "参数nqbits必须是正整数！";
+  MultiGate::errmsg2 = "参数nqbits必须是正整数！";
   
   cond = Catch[
     If[MatrixQ[sqgate], , Message[MultiGate::errmsg1]; Throw[False]];
     If[Part[Dimensions[sqgate], 1] == 
       2 And Part[Dimensions[sqgate], 2] == 2, , 
-     Message[ControlledGate::errmsg1]; Throw[False]];
+     Message[MultiGate::errmsg1]; Throw[False]];
     If[IntegerQ[nqbits] And nqbits > 0, , Message[MultiGate::errmsg2];
       Throw[False]];
     Throw[True];
@@ -165,3 +170,41 @@ MultiGate[sqgate_, nqbits_] := Module[{cond = True, ret = {{1}}, i},
    , $Failed]
   ]
 
+
+(*精确的量子哈密顿量模拟，以hamiltonian为哈密顿量矩阵，演化时间t*)
+HamiltonianSimulation[hamiltonian_, t_] := MatrixFunction[Exp, -I*hamiltonian*t]
+(*精确的量子哈密顿量模拟，以shlist中的矩阵求和为哈密顿量，演化时间t*)
+SubHamiltonianSumSimulation[shlist_, t_] := HamiltonianSimulation[Total[shlist], t]
+(*按照Trotter分解的量子哈密顿量模拟近似，以shlist中的矩阵求和为哈密顿量，演化时间t，分解次数ndiv*)
+ApproximateHamiltonianSimulationTrotter[shlist_, t_, ndiv_] := 
+ Module[{explist, roundmatrix, ret},
+  hsimdt[x_] := HamiltonianSimulation[x, t/ndiv];
+  explist = Map[hsimdt, shlist];
+  roundmatrix = Apply[Dot, explist];
+  ret = MatrixPower[roundmatrix, ndiv]]
+(*按照二阶Suzuki分解的量子哈密顿量模拟近似，以shlist中的矩阵求和为哈密顿量，演化时间t，分解次数ndiv*)
+ApproximateHamiltonianSimulationSuzuki2[shlist_, t_, ndiv_] := 
+ Module[{explist, roundmatrix, ret},
+  hsimdt2[x_] := HamiltonianSimulation[x, t/ndiv/2];
+  explist = Map[hsimdt2, shlist];
+  roundmatrix = Apply[Dot, explist] . Apply[Dot, Reverse[explist]];
+  ret = MatrixPower[roundmatrix, ndiv]]
+
+(*数值计算量子哈密顿量模拟，以hamiltonian为哈密顿量矩阵，演化时间t*)
+NHamiltonianSimulation[hamiltonian_, t_] := MatrixFunction[Exp, N[-I*hamiltonian*t]]
+(*数值计算量子哈密顿量模拟，以shlist中的矩阵求和为哈密顿量，演化时间t*)
+NSubHamiltonianSumSimulation[shlist_, t_] := NHamiltonianSimulation[Total[shlist], t]
+(*数值计算按照Trotter分解的量子哈密顿量模拟近似，以shlist中的矩阵求和为哈密顿量，演化时间t，分解次数ndiv*)
+NApproximateHamiltonianSimulationTrotter[shlist_, t_, ndiv_] := 
+ Module[{explist, roundmatrix, ret},
+  hsimdt[x_] := NHamiltonianSimulation[x, t/ndiv];
+  explist = Map[hsimdt, shlist];
+  roundmatrix = Apply[Dot, explist];
+  ret = MatrixPower[roundmatrix, ndiv]]
+(*数值计算按照二阶Suzuki分解的量子哈密顿量模拟近似，以shlist中的矩阵求和为哈密顿量，演化时间t，分解次数ndiv*)
+NApproximateHamiltonianSimulationSuzuki2[shlist_, t_, ndiv_] := 
+ Module[{explist, roundmatrix, ret},
+  hsimdt2[x_] := NHamiltonianSimulation[x, t/ndiv/2];
+  explist = Map[hsimdt2, shlist];
+  roundmatrix = Apply[Dot, explist] . Apply[Dot, Reverse[explist]];
+  ret = MatrixPower[roundmatrix, ndiv]]
