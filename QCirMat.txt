@@ -1,22 +1,40 @@
-(*基本量子态的矩阵表示*)
+(*欢迎使用QCirMat v0.3*)
+
+(*基本量子态的矩阵Ket表示*)
 Ket0 := {{1}, {0}}
 Ket1 := {{0}, {1}}
-Bra0 := {{1, 0}}
-Bra1 := {{0, 1}}
 KetPlus := 1/Sqrt[2]*{{1}, {1}}
 KetMinus := 1/Sqrt[2]*{{1}, {-1}}
-BraPlus := 1/Sqrt[2]*{{1, 1}}
-BraMinus := 1/Sqrt[2]*{{1, -1}}
-KetBell :=  1/Sqrt[2]*{{1}, {0}, {0}, {1}}
+KetBell := 1/Sqrt[2]*{{1}, {0}, {0}, {1}}
 KetBell01 := 1/Sqrt[2]*{{0}, {1}, {1}, {0}}
 KetBell10 := 1/Sqrt[2]*{{1}, {0}, {0}, {-1}}
 KetBell11 := 1/Sqrt[2]*{{0}, {1}, {-1}, {0}}
+KetBloch[theta_, phi_, gamma_] := 
+ Exp[I*gamma]*{{Cos[theta/2]}, {Exp[I*phi]*Sin[theta/2]}}
+
+(*基本量子态的矩阵Bra表示*)
+Bra0 := {{1, 0}}
+Bra1 := {{0, 1}}
+BraPlus := 1/Sqrt[2]*{{1, 1}}
+BraMinus := 1/Sqrt[2]*{{1, -1}}
 BraBell := 1/Sqrt[2]*{{1, 0, 0, 1}}
 BraBell01 := 1/Sqrt[2]*{{0, 1, 1, 0}}
 BraBell10 := 1/Sqrt[2]*{{1, 0, 0, -1}}
 BraBell11 := 1/Sqrt[2]*{{0, 1, -1, 0}}
-KetBloch[theta_, phi_, gamma_] := Exp[I*gamma]*{{Cos[theta/2]}, {Exp[I*phi]*Sin[theta/2]}}
-BraBloch[theta_, phi_, gamma_] := Exp[-I*gamma]*{{Cos[theta/2], Exp[I*phi]*Sin[theta/2]}}
+BraBloch[theta_, phi_, gamma_] := 
+ Exp[-I*gamma]*{{Cos[theta/2], Exp[-I*phi]*Sin[theta/2]}}
+
+(*基本量子态的密度矩阵表示*)
+Rho0 := Ket0 . Bra0
+Rho1 := Ket1 . Bra1
+RhoPlus := KetPlus . BraPlus
+RhoMinus := KetMinus . BraMinus
+RhoBell := KetBell . BraBell
+RhoBell01 := KetBell01 . BraBell01
+RhoBell10 := KetBell10 . BraBell10
+RhoBell11 := KetBell11 . BraBell11
+RhoBloch[theta_, phi_, gamma_] := 
+ KetBloch[theta, phi, gamma] . BraBloch[theta, phi, gamma]
 
 (*基本量子门的矩阵表示*)
 H := 1/Sqrt[2]*{{1, 1}, {1, -1}}
@@ -31,150 +49,149 @@ Tdag := {{1, 0}, {0, Exp[-I*Pi/4]}}
 SqrtX := H . S . H
 SqrtXdag := H . Sdag . H
 
-(*含参量子门的矩阵表示*)
-Rx[theta_] := {{Cos[theta/2], -I*Sin[theta/2]}, {-I*Sin[theta/2], 
-   Cos[theta/2]}}
-Ry[theta_] := {{Cos[theta/2], -Sin[theta/2]}, {Sin[theta/2], 
-   Cos[theta/2]}}
-Rz[theta_] := {{Exp[-I*theta/2], 0}, {0, Exp[I*theta/2]}}
-R1[theta_] := {{1, 0}, {0, Exp[I*theta]}}
-U3[theta_, phi_, 
-  lambda_] := {{Cos[theta/2], -Exp[I*lambda]*
-    Sin[theta/2]}, {Exp[I*phi]*Sin[theta/2], 
-   Exp[I*(lambda + phi)]*Cos[theta/2]}}
-
-(*多位量子门的矩阵表示*)
+(*多比特量子门的矩阵表示*)
 CNOT := {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}}
 CNOT21 := {{1, 0, 0, 0}, {0, 0, 0, 1}, {0, 0, 1, 0}, {0, 1, 0, 0}}
 SWAP := {{1, 0, 0, 0}, {0, 0, 1, 0}, {0, 1, 0, 0}, {0, 0, 0, 1}}
 CZ := {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, -1}}
 iSWAP := {{1, 0, 0, 0}, {0, 0, I, 0}, {0, I, 0, 0}, {0, 0, 0, 1}}
 
+(*含参量子门的矩阵表示*)
+Rx[theta_] := {{Cos[theta/2], -I*Sin[theta/2]}, {-I*Sin[theta/2], 
+   Cos[theta/2]}}
+Ry[theta_] := {{Cos[theta/2], -Sin[theta/2]}, {Sin[theta/2], 
+   Cos[theta/2]}}
+Rz[theta_] := {{Exp[-I*theta/2], 0}, {0, Exp[I*theta/2]}}
+U1[theta_] := {{1, 0}, {0, Exp[I*theta]}}
+U3[theta_, phi_, 
+  lambda_] := {{Cos[theta/2], -Exp[I*lambda]*
+    Sin[theta/2]}, {Exp[I*phi]*Sin[theta/2], 
+   Exp[I*(lambda + phi)]*Cos[theta/2]}}
+Rxx[theta_] := {{Cos[theta/2], 0, 0, -I*Sin[theta/2]}, {0, 
+   Cos[theta/2], -I*Sin[theta/2], 0}, {0, -I*Sin[theta/2], 
+   Cos[theta/2], 0}, {-I*Sin[theta/2], 0, 0, Cos[theta/2]}}
+Ryy[theta_] := {{Cos[theta/2], 0, 0, I*Sin[theta/2]}, {0, 
+   Cos[theta/2], -I*Sin[theta/2], 0}, {0, -I*Sin[theta/2], 
+   Cos[theta/2], 0}, {I*Sin[theta/2], 0, 0, Cos[theta/2]}}
+Rzz[theta_] := {{Exp[-I*theta/2], 0, 0, 0}, {0, Exp[I*theta/2], 0, 
+   0}, {0, 0, Exp[I*theta/2], 0}, {0, 0, 0, Exp[-I*theta/2]}}
+
 (*对易子和反对易子*)
 Commutator[a_, b_] := a . b - b . a
 AntiCommutator[a_, b_] := a . b + a . b
 
 
-(*在具有nqbits个量子比特的线路上，对以indexlist列表为下标的一系列量子比特，应用gate门，生成相应的矩阵表示。indexlist的量子比特个数应与gate门的维度相匹配。*)
+(*在具有nqbits个量子比特的线路上，对以indexlist列表为下标的一系列量子比特，应用gate门，生成相应的矩阵表示。indexl\
+ist的量子比特个数应与gate门的维度相匹配。*)
 ApplyGate[gate_, nqbits_, indexlist_] := 
  Module[{ret = SparseArray[{}, {2^nqbits, 2^nqbits}], cond = True, 
    gdim, i, j, k, ngatebits, cindexlist, tmpval1, tmpval2, digi1, 
-   digi2, addlist},
+   digi2, addlist}, 
   ApplyGate::errmsg1 = "参数gate必须是具有(2^k)\[Times](2^k)维度的矩阵！";
   ApplyGate::errmsg2 = "参数indexlist必须是无重复的合法的下标列表！";
   ApplyGate::errmsg3 = "参数nqbits必须是正整数！";
   ApplyGate::errmsg4 = "参数indexlist的长度与gate的维度不匹配！";
   ApplyGate::errmsg5 = "参数nqbits不能小于indexlist的长度！";
-  
-  cond = Catch[
-    If[MatrixQ[gate], , Message[ApplyGate::errmsg1]; Throw[False]];
-    If[ListQ[indexlist], , Message[ApplyGate::errmsg2]; 
+  cond = 
+   Catch[If[MatrixQ[gate], , Message[ApplyGate::errmsg1]; 
      Throw[False]];
-    If[DuplicateFreeQ[indexlist], , Message[ApplyGate::errmsg2]; 
+    If[ListQ[indexlist], , Message[ApplyGate::errmsg2];
      Throw[False]];
-    If[IntegerQ[nqbits] And nqbits > 0, , Message[ApplyGate::errmsg3];
-      Throw[False]];
+    If[DuplicateFreeQ[indexlist], , Message[ApplyGate::errmsg2];
+     Throw[False]];
+    If[IntegerQ[nqbits] And nqbits > 0, , 
+     Message[ApplyGate::errmsg3];
+     Throw[False]];
     If[Part[Dimensions[gate], 1] == Part[Dimensions[gate], 2], , 
      Message[ApplyGate::errmsg1]; Throw[False]];
     gdim = Part[Dimensions[gate], 1];
     ngatebits = Log2[gdim];
-    If[IntegerQ[ngatebits], , Message[ApplyGate::errmsg1]; 
+    If[IntegerQ[ngatebits], , Message[ApplyGate::errmsg1];
      Throw[False]];
-    If[ngatebits == Length[indexlist], , Message[ApplyGate::errmsg4]; 
+    If[ngatebits == Length[indexlist], , Message[ApplyGate::errmsg4];
      Throw[False]];
-    If[nqbits >= ngatebits, , Message[ApplyGate::errmsg5]; 
+    If[nqbits >= ngatebits, , Message[ApplyGate::errmsg5];
      Throw[False]];
     If[AllTrue[indexlist, Between[{1, nqbits}]], , 
      Message[ApplyGate::errmsg2]; Throw[False]];
-    Throw[True];
-    ];
-  
-  If[cond,
-   cindexlist = Complement[Range[nqbits], indexlist];
+    Throw[True];];
+  If[cond, cindexlist = Complement[Range[nqbits], indexlist];
    addlist = {};
-   For[i = 1, i <= 2^Length[cindexlist], i++,
+   For[i = 1, i <= 2^Length[cindexlist], i++, 
     digi1 = IntegerDigits[i - 1, 2, Length[cindexlist]];
     tmpval1 = 0;
-    For[j = 1, j <= Length[cindexlist], j++,
+    For[j = 1, j <= Length[cindexlist], j++, 
      tmpval1 += 
-      BitShiftLeft[Part[digi1, j], nqbits - Part[cindexlist, j]]
-     ];
-    AppendTo[addlist, tmpval1];
-    ];
-   
-   For[i = 1, i <= gdim, i++,
-    For[j = 1, j <= gdim, j++,
+      BitShiftLeft[Part[digi1, j], nqbits - Part[cindexlist, j]]];
+    AppendTo[addlist, tmpval1];];
+   For[i = 1, i <= gdim, i++, 
+    For[j = 1, j <= gdim, j++, 
       digi1 = IntegerDigits[i - 1, 2, ngatebits];
       digi2 = IntegerDigits[j - 1, 2, ngatebits];
       tmpval1 = tmpval2 = 0;
-      For[k = 1, k <= ngatebits, k++,
+      For[k = 1, k <= ngatebits, k++, 
        tmpval1 += 
         BitShiftLeft[Part[digi1, k], nqbits - Part[indexlist, k]];
        tmpval2 += 
-        BitShiftLeft[Part[digi2, k], nqbits - Part[indexlist, k]];
-       ];
-      For[k = 1, k <= Length[addlist], k++,
+        BitShiftLeft[Part[digi2, k], nqbits - Part[indexlist, k]];];
+      For[k = 1, k <= Length[addlist], k++, 
        Part[ret, BitOr[tmpval1, Part[addlist, k]] + 1, 
-          BitOr[tmpval2, Part[addlist, k]] + 1] = Part[gate, i, j];
-       ];
-      ];
-    ];
-   
-   Normal[ret]
-   , $Failed]
-   ]
+          BitOr[tmpval2, Part[addlist, k]] + 1] = 
+         Part[gate, i, j];];];];
+   Normal[ret], $Failed]]
 
-
-(*生成具有nctrlbits个控制比特的受控版本的gate门的矩阵表示。生成的受控门中前nctrlbits个量子比特为控制位，后续的量子比特作用gate门。*)
+(*生成具有nctrlbits个控制比特的受控版本的gate门的矩阵表示。生成的受控门中前nctrlbits个量子比特为控制位，后续的量子比\
+特作用gate门。*)
 ControlledGate[gate_, nctrlbits_] := Module[{ids, cond = True},
   ControlledGate::errmsg1 = "参数gate必须是方阵！";
   ControlledGate::errmsg2 = "参数nctrlbits必须是正整数！";
-  
-  cond = Catch[
-    If[MatrixQ[gate], , Message[ControlledGate::errmsg1]; 
+  cond = Catch[If[MatrixQ[gate], , Message[ControlledGate::errmsg1];
      Throw[False]];
     If[Part[Dimensions[gate], 1] == Part[Dimensions[gate], 2], , 
      Message[ControlledGate::errmsg1]; Throw[False]];
     If[IntegerQ[nctrlbits] And nctrlbits > 0, , 
      Message[ControlledGate::errmsg2]; Throw[False]];
-    Throw[True];
-    ];
-  
-  If[cond,
+    Throw[True];];
+  If[cond, 
    ids = IdentityMatrix[Part[Dimensions[gate], 1]*(2^nctrlbits - 1)];
-   Normal[BlockDiagonalMatrix[{ids, gate}]]
-   , $Failed]
-  ]
-
+   Normal[BlockDiagonalMatrix[{ids, gate}]], $Failed]]
 
 (*对总共nqbits个量子比特的每一个分别应用单比特量子门sqgate，生成对应的矩阵表示。*)
 MultiGate[sqgate_, nqbits_] := Module[{cond = True, ret = {{1}}, i},
   MultiGate::errmsg1 = "参数sqgate必须是2\[Times]2矩阵！";
   MultiGate::errmsg2 = "参数nqbits必须是正整数！";
-  
-  cond = Catch[
-    If[MatrixQ[sqgate], , Message[MultiGate::errmsg1]; Throw[False]];
+  cond = 
+   Catch[If[MatrixQ[sqgate], , Message[MultiGate::errmsg1]; 
+     Throw[False]];
     If[Part[Dimensions[sqgate], 1] == 
       2 And Part[Dimensions[sqgate], 2] == 2, , 
      Message[MultiGate::errmsg1]; Throw[False]];
-    If[IntegerQ[nqbits] And nqbits > 0, , Message[MultiGate::errmsg2];
-      Throw[False]];
-    Throw[True];
-    ];
-  
-  If[cond,
-   For[i = 0, i < nqbits, i++,
-    ret = KroneckerProduct[ret, sqgate]
-    ];
-   ret
-   , $Failed]
-  ]
+    If[IntegerQ[nqbits] And nqbits > 0, , 
+     Message[MultiGate::errmsg2];
+     Throw[False]];
+    Throw[True];];
+  If[cond, 
+   For[i = 0, i < nqbits, i++, ret = KroneckerProduct[ret, sqgate]];
+   ret, $Failed]]
+
+(*衍生的受控门*)
+Toffoli := ControlledGate[X, 2]
+Fredkin := ControlledGate[SWAP, 1]
+CCZ := ControlledGate[Z, 2]
+CY := ControlledGate[Y, 1]
+CH := ControlledGate[H, 1]
+CRx[theta_] := ControlledGate[Rx[theta], 1]
+CRy[theta_] := ControlledGate[Ry[theta], 1]
+CRz[theta_] := ControlledGate[Rz[theta], 1]
+CU1[theta_] := ControlledGate[U1[theta], 1]
 
 
 (*精确的量子哈密顿量模拟，以hamiltonian为哈密顿量矩阵，演化时间t*)
-HamiltonianSimulation[hamiltonian_, t_] := MatrixFunction[Exp, -I*hamiltonian*t]
+HamiltonianSimulation[hamiltonian_, t_] := 
+ MatrixFunction[Exp, -I*hamiltonian*t]
 (*精确的量子哈密顿量模拟，以shlist中的矩阵求和为哈密顿量，演化时间t*)
-SubHamiltonianSumSimulation[shlist_, t_] := HamiltonianSimulation[Total[shlist], t]
+SubHamiltonianSumSimulation[shlist_, t_] := 
+ HamiltonianSimulation[Total[shlist], t]
 (*按照Trotter分解的量子哈密顿量模拟近似，以shlist中的矩阵求和为哈密顿量，演化时间t，分解次数ndiv*)
 ApproximateHamiltonianSimulationTrotter[shlist_, t_, ndiv_] := 
  Module[{explist, roundmatrix, ret},
@@ -191,9 +208,11 @@ ApproximateHamiltonianSimulationSuzuki2[shlist_, t_, ndiv_] :=
   ret = MatrixPower[roundmatrix, ndiv]]
 
 (*数值计算量子哈密顿量模拟，以hamiltonian为哈密顿量矩阵，演化时间t*)
-NHamiltonianSimulation[hamiltonian_, t_] := MatrixFunction[Exp, N[-I*hamiltonian*t]]
+NHamiltonianSimulation[hamiltonian_, t_] := 
+ MatrixFunction[Exp, N[-I*hamiltonian*t]]
 (*数值计算量子哈密顿量模拟，以shlist中的矩阵求和为哈密顿量，演化时间t*)
-NSubHamiltonianSumSimulation[shlist_, t_] := NHamiltonianSimulation[Total[shlist], t]
+NSubHamiltonianSumSimulation[shlist_, t_] := 
+ NHamiltonianSimulation[Total[shlist], t]
 (*数值计算按照Trotter分解的量子哈密顿量模拟近似，以shlist中的矩阵求和为哈密顿量，演化时间t，分解次数ndiv*)
 NApproximateHamiltonianSimulationTrotter[shlist_, t_, ndiv_] := 
  Module[{explist, roundmatrix, ret},
